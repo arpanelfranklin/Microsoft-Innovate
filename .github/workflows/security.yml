@@ -1,0 +1,23 @@
+name: Security-Scan 
+
+on: 
+	pull-request: 
+	push: 
+		branches: [main]
+	workflow_dispatch: 
+
+jobs: 
+	security: 
+		name: Security pipeline 
+		runs-on: ubuntu-latest
+		
+		steps: 
+			#1 
+			- name: Checkout 
+			  uses: actions/checkout@v4
+			  with: 
+				fetch-depth: 0
+			#2
+			- name: Print
+			  run: |
+				echo "pipeline workes" 
