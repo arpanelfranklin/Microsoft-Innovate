@@ -1,23 +1,19 @@
-name: Security-Scan 
+name: security-scan 
 
-on: 
-	pull-request: 
-	push: 
-		branches: [main]
-	workflow_dispatch: 
+on:
+  pull_request: 
+  push:
+    branches:
+      - main
 
-jobs: 
-	security: 
-		name: Security pipeline 
-		runs-on: ubuntu-latest
-		
-		steps: 
-			#1 
-			- name: Checkout 
-			  uses: actions/checkout@v4
-			  with: 
-				fetch-depth: 0
-			#2
-			- name: Print
-			  run: |
-				echo "pipeline workes" 
+jobs:
+  scan-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout 
+        uses: actions/checkout@v4
+
+      - name: gitleaks 
+        run: |
+          echo "scaning gitleaks"
+
