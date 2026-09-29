@@ -15,8 +15,43 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Reports 
+        run: mkdir -p reports
+
       - name: Gitleaks
         uses: gitleaks/gitleaks-action@v3
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Gitleaks 
+        run: |
+          gitleaks detect \
+            --source . \
+            --report-format json \
+            --report-path reports/gitleaks.json \
+            --exit-code 1
+        continue-on-error: true
+      
+      - name: Display Gitleaks report 
+        run: | 
+           if [ -f reports/gitleaks.json ]; then
+            cat reports/gitleaks.json
+           else
+            echo "No Gitleaks report generated."
+           fi
+
+      - name: Upload gitleaks report 
+        uses: actions/upload-artifact@v4
+        with: 
+            name: gitleaks-report 
+            path: reports/gitleaks.json
+          
+
+      - name: TruffleHog 
+        uses: trufflesecurity/trufflehog-enterprise-action@main
+        with: 
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD 
+          extra_args: --only-verified
+        
