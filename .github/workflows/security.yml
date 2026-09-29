@@ -12,8 +12,11 @@ jobs:
     steps:
       - name: checkout 
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: gitleaks 
-        run: |
-          echo "scaning gitleaks"
-
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v3
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
